@@ -17,7 +17,7 @@ public enum ConnectivityResponseStringValidationMode: Int {
 typealias ResponseStringValidator = ConnectivityResponseStringValidator // For internal use.
 
 @objcMembers
-public class ConnectivityResponseStringValidator: ConnectivityResponseValidator {
+public class ConnectivityResponseStringValidator: SKConnectivityResponseValidator {
     public typealias ValidationMode = ConnectivityResponseStringValidationMode
 
     /// The method used to validate the response from the connectivity endpoints.
@@ -38,7 +38,7 @@ public class ConnectivityResponseStringValidator: ConnectivityResponseValidator 
     }
 
     public func isResponseValid(urlRequest: URLRequest, response: URLResponse?, data: Data?) -> Bool {
-        let validator: ConnectivityResponseValidator
+        let validator: SKConnectivityResponseValidator
         switch responseValidationMode {
         case .containsExpectedResponseString:
             validator = ConnectivityResponseContainsStringValidator(

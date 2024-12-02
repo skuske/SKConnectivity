@@ -7,11 +7,11 @@
 
 import Foundation
 
-typealias ResponseValidator = ConnectivityResponseValidator // For internal use.
+typealias ResponseValidator = SKConnectivityResponseValidator // For internal use.
 
 /// The contract for a response validator used to determine
 /// connectivity based on a network response
-@objc public protocol ConnectivityResponseValidator {
+@objc public protocol SKConnectivityResponseValidator {
     /// Determines whether or not the response is valid
     /// and expected for a given `URL`
     ///

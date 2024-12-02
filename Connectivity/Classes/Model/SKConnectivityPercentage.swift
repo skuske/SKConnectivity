@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ConnectivityPercentage: Comparable {
+public struct SKConnectivityPercentage: Comparable {
     let value: Double
 
     public init(_ value: Double) {

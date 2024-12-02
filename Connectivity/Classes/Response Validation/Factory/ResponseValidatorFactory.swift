@@ -8,8 +8,8 @@
 import Foundation
 
 struct ResponseValidatorFactory: Factory {
-    typealias ValidationMode = ConnectivityResponseValidationMode
-    typealias Validator = ConnectivityResponseValidator
+    typealias ValidationMode = SKConnectivityResponseValidationMode
+    typealias Validator = SKConnectivityResponseValidator
 
     /// A custom validator if the user has supplied one
     private let customValidator: Validator

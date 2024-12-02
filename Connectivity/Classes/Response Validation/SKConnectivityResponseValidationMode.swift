@@ -8,7 +8,7 @@
 import Foundation
 
 @objc
-public enum ConnectivityResponseValidationMode: Int {
+public enum SKConnectivityResponseValidationMode: Int {
     case containsExpectedResponseString,
          equalsExpectedResponseString,
          matchesRegularExpression,

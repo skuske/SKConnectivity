@@ -7,9 +7,9 @@
 
 import Foundation
 
-typealias Configuration = ConnectivityConfiguration // For internal use.
+typealias Configuration = SKConnectivityConfiguration // For internal use.
 
-@objc public class ConnectivityConfiguration: NSObject {
+@objc public class SKConnectivityConfiguration: NSObject {
     private(set) var authorizationHeader: String?
     private(set) var bearerToken: String?
     let callbackQueue: DispatchQueue
@@ -34,16 +34,16 @@ typealias Configuration = ConnectivityConfiguration // For internal use.
         sessionConfiguration.timeoutIntervalForResource = 5.0
         return sessionConfiguration
     }()
-    private(set) var framework: Connectivity.Framework = .network
+    private(set) var framework: SKConnectivity.Framework = .network
     private(set) var pollingInterval: Double
     private(set) var pollingIsEnabled: Bool
     private(set) var pollWhileOfflineOnly: Bool
     private(set) var responseValidator: ResponseValidator
     
     /// % successful connections required to be deemed to have connectivity
-    let successThreshold: Connectivity.Percentage
+    let successThreshold: SKConnectivity.Percentage
     private(set) var urlSessionConfiguration: URLSessionConfiguration
-    private(set) var validationMode: Connectivity.ValidationMode?
+    private(set) var validationMode: SKConnectivity.ValidationMode?
     
     public init(
         callbackQueue: DispatchQueue = DispatchQueue.main,
@@ -53,13 +53,13 @@ typealias Configuration = ConnectivityConfiguration // For internal use.
         pollingInterval: Double = 10.0,
         pollingIsEnabled: Bool = true,
         pollWhileOfflineOnly: Bool = true,
-        responseValidator: ConnectivityResponseValidator = ConnectivityResponseStringValidator(
+        responseValidator: SKConnectivityResponseValidator = ConnectivityResponseStringValidator(
             validationMode: .containsExpectedResponseString,
             expectedResponse: "Success"
         ),
-        successThreshold: Connectivity.Percentage = Connectivity.Percentage(50.0),
+        successThreshold: SKConnectivity.Percentage = SKConnectivity.Percentage(50.0),
         urlSessionConfiguration: URLSessionConfiguration = defaultURLSessionConfiguration,
-        validationMode: Connectivity.ValidationMode? = nil
+        validationMode: SKConnectivity.ValidationMode? = nil
     ) {
         self.callbackQueue = callbackQueue
         self.checkWhenApplicationDidBecomeActive = checkWhenApplicationDidBecomeActive
@@ -98,7 +98,7 @@ typealias Configuration = ConnectivityConfiguration // For internal use.
         return self
     }
     
-    public func configureFramework(_ framework: Connectivity.Framework) -> Self {
+    public func configureFramework(_ framework: SKConnectivity.Framework) -> Self {
         self.framework = framework
         return self
     }
@@ -118,7 +118,7 @@ typealias Configuration = ConnectivityConfiguration // For internal use.
         return self
     }
     
-    public func configureResponseValidator(_ responseValidator: ConnectivityResponseValidator) -> Self {
+    public func configureResponseValidator(_ responseValidator: SKConnectivityResponseValidator) -> Self {
         self.responseValidator = responseValidator
         return self
     }
@@ -132,7 +132,7 @@ typealias Configuration = ConnectivityConfiguration // For internal use.
         return self
     }
     
-    public func configureValidationMode(with validationMode: Connectivity.ValidationMode) -> Self {
+    public func configureValidationMode(with validationMode: SKConnectivity.ValidationMode) -> Self {
         self.validationMode = validationMode
         return self
     }

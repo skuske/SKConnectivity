@@ -10,7 +10,7 @@ import Foundation
 typealias ResponseContainsStringValidator = ConnectivityResponseContainsStringValidator // For internal use.
 
 @objcMembers
-public class ConnectivityResponseContainsStringValidator: ConnectivityResponseValidator {
+public class ConnectivityResponseContainsStringValidator: SKConnectivityResponseValidator {
     /// The `String` expected to be contained in the response
     public let expectedResponse: String
 

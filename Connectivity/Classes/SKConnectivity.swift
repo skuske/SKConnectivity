@@ -16,17 +16,17 @@ import Reachability
 #endif
 
 @objcMembers
-public class Connectivity: NSObject {
-    public typealias Framework = ConnectivityFramework
-    public typealias Interface = ConnectivityInterface
-    public typealias NetworkConnected = (Connectivity) -> Void
-    public typealias NetworkDisconnected = (Connectivity) -> Void
-    public typealias Percentage = ConnectivityPercentage
-    public typealias Status = ConnectivityStatus
-    public typealias ValidationMode = ConnectivityResponseValidationMode
+public class SKConnectivity: NSObject {
+    public typealias Framework = SKConnectivityFramework
+    public typealias Interface = SKConnectivityInterface
+    public typealias NetworkConnected = (SKConnectivity) -> Void
+    public typealias NetworkDisconnected = (SKConnectivity) -> Void
+    public typealias Percentage = SKConnectivityPercentage
+    public typealias Status = SKConnectivityStatus
+    public typealias ValidationMode = SKConnectivityResponseValidationMode
 #if canImport(Combine)
     @available(OSX 10.15, iOS 13.0, tvOS 13.0, *)
-    public typealias Publisher = ConnectivityPublisher
+    public typealias Publisher = SKConnectivityPublisher
 #endif
     
     // MARK: State
@@ -65,10 +65,10 @@ public class Connectivity: NSObject {
     }
 
     /// URLs to contact in order to check connectivity
-    public var connectivityURLRequests: [URLRequest] = Connectivity
-        .defaultConnectivityURLRequests(shouldUseHTTPS: Connectivity.isHTTPSOnly) {
+    public var connectivityURLRequests: [URLRequest] = SKConnectivity
+        .defaultConnectivityURLRequests(shouldUseHTTPS: SKConnectivity.isHTTPSOnly) {
             didSet {
-                if Connectivity.isHTTPSOnly { // if HTTPS only set only allow HTTPS URLs
+                if SKConnectivity.isHTTPSOnly { // if HTTPS only set only allow HTTPS URLs
                     connectivityURLRequests = connectivityURLRequests.filter { request in
                         return request.url?.absoluteString.lowercased().starts(with: "https") ?? false
                     }
@@ -97,7 +97,7 @@ public class Connectivity: NSObject {
     private(set) var externalQueue = DispatchQueue.main
     
     /// Whether or not to use System Configuration or Network (on iOS 12+) framework.
-    public var framework: Connectivity.Framework = .network
+    public var framework: SKConnectivity.Framework = .network
     
     /// Used to for checks using NWPathMonitor
     private(set) var internalQueue = DispatchQueue.global(qos: .default)
@@ -142,13 +142,13 @@ public class Connectivity: NSObject {
     public var pollWhileOfflineOnly: Bool = false
     
     /// Status last time a check was performed
-    private var previousStatus: ConnectivityStatus = .determining
+    private var previousStatus: SKConnectivityStatus = .determining
     
     /// Reachability instance for checking network adapter status
     private let reachability: Reachability
     
     /// Can be used to set a custom validator conforming to `ConnectivityResponseValidator`
-    public var responseValidator: ConnectivityResponseValidator =
+    public var responseValidator: SKConnectivityResponseValidator =
     ConnectivityResponseContainsStringValidator()
     
     /// Returns the appropriate validator for the current validation mode.
@@ -162,10 +162,10 @@ public class Connectivity: NSObject {
     }
     
     /// Status of the current connection
-    public var status: ConnectivityStatus = .determining
+    public var status: SKConnectivityStatus = .determining
     
     /// % successful connections required to be deemed to have connectivity
-    public var successThreshold = Connectivity.Percentage(50.0)
+    public var successThreshold = SKConnectivity.Percentage(50.0)
     
     /// Timer for polling connectivity endpoints when not awaiting changes in reachability
     private var timer: Timer?
@@ -196,7 +196,7 @@ public class Connectivity: NSObject {
         self.reachability = Reachability.forInternetConnection()
     }
     
-    public init(configuration: ConnectivityConfiguration) {
+    public init(configuration: SKConnectivityConfiguration) {
         self.reachability = Reachability.forInternetConnection()
         super.init()
         configure(with: configuration)
@@ -208,7 +208,7 @@ public class Connectivity: NSObject {
 }
 
 // Public API
-public extension Connectivity {
+public extension SKConnectivity {
     /// Textual representation of connectivity state
     override var description: String {
         return "\(status)"
@@ -238,7 +238,7 @@ public extension Connectivity {
         return isDisconnected(with: ReachableViaWiFi)
     }
     
-    func checkConnectivity(completion: ((Connectivity) -> Void)? = nil) {
+    func checkConnectivity(completion: ((SKConnectivity) -> Void)? = nil) {
         let deadline: DispatchTime = (previousStatus == .notConnected)
         ? DispatchTime.now() + connectivityCheckLatency
         : DispatchTime.now()
@@ -315,7 +315,7 @@ public extension Connectivity {
 }
 
 // Private API
-private extension Connectivity {
+private extension SKConnectivity {
 #if canImport(UIKit)
     /// Checks connectivity when the application becomes active.
     @objc func applicationDidBecomeActive(_: NSNotification) {
@@ -362,7 +362,7 @@ private extension Connectivity {
     /// Checks specified URLs for the expected response to determine whether Internet connectivity exists. It is
     /// intended that this function should be called only from `checkConnectivity` to ensure that it is executed
     /// on  `internalQueue`.
-    private func checkConnectivityOnInternalQueue(completion: ((Connectivity) -> Void)? = nil) {
+    private func checkConnectivityOnInternalQueue(completion: ((SKConnectivity) -> Void)? = nil) {
         let dispatchGroup = DispatchGroup()
         var tasks: [URLSessionDataTask] = []
         var successfulChecks: UInt = 0, failedChecks: UInt = 0
@@ -416,7 +416,7 @@ private extension Connectivity {
     }
     
     /// Applies the settings specified by the `ConnectivityConfiguration` object.
-    private func configure(with configuration: ConnectivityConfiguration) {
+    private func configure(with configuration: SKConnectivityConfiguration) {
         authorizationHeader = configuration.authorizationHeader
         bearerToken = configuration.bearerToken
 #if canImport(UIKit)
@@ -481,7 +481,7 @@ private extension Connectivity {
         return sessionConfiguration
     }
     
-    func interface(with networkStatus: NetworkStatus) -> ConnectivityInterface {
+    func interface(with networkStatus: NetworkStatus) -> SKConnectivityInterface {
         switch networkStatus {
         case ReachableViaWiFi:
             return .wifi
@@ -493,7 +493,7 @@ private extension Connectivity {
     }
     
     @available(OSX 10.14, iOS 12.0, tvOS 12.0, *)
-    func interface(from path: NWPath) -> ConnectivityInterface {
+    func interface(from path: NWPath) -> SKConnectivityInterface {
         if path.usesInterfaceType(.wifi) {
             return .wifi
         } else if path.usesInterfaceType(.wiredEthernet) {
@@ -506,7 +506,7 @@ private extension Connectivity {
     }
     
     @available(OSX 10.14, iOS 12.0, tvOS 12.0, *)
-    func interfaces(from path: NWPath) -> [ConnectivityInterface] {
+    func interfaces(from path: NWPath) -> [SKConnectivityInterface] {
         return path.availableInterfaces.map { interface in
             switch interface.type {
             case .cellular:
@@ -657,8 +657,8 @@ private extension Connectivity {
     }
     
     /// Determines the connectivity status using info provided by `NetworkStatus`.
-    func status(from networkStatus: NetworkStatus, isConnected: Bool) -> ConnectivityStatus {
-        let currentStatus: ConnectivityStatus
+    func status(from networkStatus: NetworkStatus, isConnected: Bool) -> SKConnectivityStatus {
+        let currentStatus: SKConnectivityStatus
         switch networkStatus {
         case ReachableViaWWAN:
             currentStatus = isConnected ? .connectedViaCellular : .connectedViaCellularWithoutInternet
@@ -672,7 +672,7 @@ private extension Connectivity {
     
     /// Determines the connectivity status using network interface info provided by `NWPath`.
     @available(OSX 10.14, iOS 12.0, tvOS 12.0, *)
-    func status(from path: NWPath, isConnected: Bool) -> ConnectivityStatus {
+    func status(from path: NWPath, isConnected: Bool) -> SKConnectivityStatus {
         switch interface(from: path) {
         case .cellular:
             return isConnected ? .connectedViaCellular : .connectedViaCellularWithoutInternet
@@ -686,7 +686,7 @@ private extension Connectivity {
     }
     
     /// Determines whether a change in connectivity has taken place.
-    private func statusHasChanged(previousStatus: ConnectivityStatus?, currentStatus: ConnectivityStatus) -> Bool {
+    private func statusHasChanged(previousStatus: SKConnectivityStatus?, currentStatus: SKConnectivityStatus) -> Bool {
         guard let previousStatus = previousStatus else {
             return true
         }

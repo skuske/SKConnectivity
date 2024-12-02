@@ -10,7 +10,7 @@ import Foundation
 typealias ResponseRegExValidator = ConnectivityResponseRegExValidator // For internal use.
 
 @objcMembers
-public class ConnectivityResponseRegExValidator: ConnectivityResponseValidator {
+public class ConnectivityResponseRegExValidator: SKConnectivityResponseValidator {
     public static let defaultRegularExpression = ".*?<BODY>.*?Success.*?</BODY>.*"
 
     /// Matching options for determining how the response is matched against the regular expression.

@@ -8,7 +8,7 @@
 import Foundation
 import Network
 
-public enum ConnectivityInterface {
+public enum SKConnectivityInterface {
     case cellular
     case ethernet
     case loopback

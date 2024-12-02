@@ -7,7 +7,7 @@
 
 import Foundation
 
-@objc public enum ConnectivityFramework: Int {
+@objc public enum SKConnectivityFramework: Int {
     case network
     case systemConfiguration
 }
