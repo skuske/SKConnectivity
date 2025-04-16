@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Connectivity",
+    name: "SKConnectivity",
     platforms: [
         .iOS(.v12),
         .tvOS(.v12),
@@ -10,20 +10,20 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "Connectivity",
-            targets: ["Connectivity"]
+            name: "SKConnectivity",
+            targets: ["SKConnectivity"]
         )
     ],
     targets: [
         .target(
-            name: "Connectivity",
-            dependencies: ["Reachability"],
+            name: "SKConnectivity",
+            dependencies: ["SKReachability"],
             path: "Connectivity/Classes",
             exclude: ["Reachability"],
             swiftSettings: [.define("IMPORT_REACHABILITY")]
         ),
         .target(
-            name: "Reachability",
+            name: "SKReachability",
             dependencies: [],
             path: "Connectivity/Classes/Reachability",
             publicHeadersPath: "",

@@ -11,7 +11,7 @@ import Combine
 import Foundation
 
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, *)
-class ConnectivitySubscription<S: Subscriber>: Subscription where S.Input == SKConnectivity, S.Failure == Never {
+class SKConnectivitySubscription<S: Subscriber>: Subscription where S.Input == SKConnectivity, S.Failure == Never {
     private let SKconnectivity: SKConnectivity
     private var subscriber: S?
 

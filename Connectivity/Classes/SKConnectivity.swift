@@ -145,7 +145,7 @@ public class SKConnectivity: NSObject {
     private var previousStatus: SKConnectivityStatus = .determining
     
     /// Reachability instance for checking network adapter status
-    private let reachability: Reachability
+    private let reachability: SKReachability
     
     /// Can be used to set a custom validator conforming to `ConnectivityResponseValidator`
     public var responseValidator: SKConnectivityResponseValidator =
@@ -193,11 +193,11 @@ public class SKConnectivity: NSObject {
     
     public init(shouldUseHTTPS: Bool = true) {
         type(of: self).isHTTPSOnly = shouldUseHTTPS
-        self.reachability = Reachability.forInternetConnection()
+        self.reachability = SKReachability.forInternetConnection()
     }
     
     public init(configuration: SKConnectivityConfiguration) {
-        self.reachability = Reachability.forInternetConnection()
+        self.reachability = SKReachability.forInternetConnection()
         super.init()
         configure(with: configuration)
     }

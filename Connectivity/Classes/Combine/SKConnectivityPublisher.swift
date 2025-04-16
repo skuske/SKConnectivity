@@ -22,7 +22,7 @@ public struct SKConnectivityPublisher: Publisher {
     
     public func receive<S: Subscriber>(subscriber: S)
         where SKConnectivityPublisher.Failure == S.Failure, SKConnectivityPublisher.Output == S.Input {
-            let subscription = ConnectivitySubscription(configuration: configuration, subscriber: subscriber)
+            let subscription = SKConnectivitySubscription(configuration: configuration, subscriber: subscriber)
         subscriber.receive(subscription: subscription)
     }
 }
